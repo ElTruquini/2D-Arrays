@@ -18,7 +18,13 @@ For example:
 
 import java.util.*;
 
+
 public class Day6{
+
+	static String num1, num2, holder;
+	static Scanner nums;
+	static int num1x, num1y;
+	static int num2x, num2y;
 
 	static int x = 10;
 	static int y = 10;
@@ -53,12 +59,46 @@ public class Day6{
 		}
 	}
 
+	static void getRange(String stringy, Scanner reader){
+
+			//Scanner reader = new Scanner (stringy);
+
+			num1 = reader.next();
+			nums = new Scanner (num1);
+			nums.useDelimiter(",");
+			num1x = nums.nextInt();
+			num1y = nums.nextInt();
+			System.out.println("Row Start " + num1x + " Column Start " + num1y );
+			
+			//finds second int param
+			
+			//while (!reader.hasNextInt()){ 
+				holder = reader.next();
+			//}
+
+			num2 = reader.next();
+			nums = new Scanner (num2);
+			nums.useDelimiter(",");
+			num2x = nums.nextInt();
+			num2y = nums.nextInt();
+			System.out.println("Row End " + num2x + " Column End " + num2y );
+	}
+
 	public static void main(String[] args) {
-		String stringy = "toggle 0,0 through 9,9";
+		String stringy = "toggle 1,1 through 2,2";
 		Scanner reader = new Scanner (stringy);
 
 		String instruction;
 		instruction = reader.next();
+
+		if (instruction.equals("turn")){
+			instruction = reader.next();
+			if (instruction.equals("off")){
+				getRange(stringy, reader);
+			}
+
+		}
+
 
 		//Decomposes TOGGLE instruction
 		if (instruction.equals("toggle")){
@@ -68,26 +108,7 @@ public class Day6{
 				reader.next();
 			}
 			*/
-			String num1 = reader.next();
-			Scanner nums = new Scanner (num1);
-			nums.useDelimiter(",");
-			int num1x = nums.nextInt();
-			int num1y = nums.nextInt();
-			System.out.println("Row Start " + num1x + " Column Start " + num1y );
-			
-			//finds second int param
-			
-			//while (!reader.hasNextInt()){ 
-				String holder = reader.next();
-			//}
-
-			String num2 = reader.next();
-			nums = new Scanner (num2);
-			nums.useDelimiter(",");
-			int num2x = nums.nextInt();
-			int num2y = nums.nextInt();
-			System.out.println("Row End " + num2x + " Column End " + num2y );
-
+			getRange(stringy, reader);
 			toggle(num1x, num1y, num2x, num2y);
 		}
 		print();
