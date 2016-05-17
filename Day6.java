@@ -17,27 +17,28 @@ For example:
 */
 
 import java.util.*;
+import java.io.*;
 
 
 public class Day6{
 
 	static String num1, num2, holder;
 	static Scanner nums;
-	static int num1x, num1y;
-	static int num2x, num2y;
+	static int num1x, num1y, num2x, num2y, total;
 
-	static int x = 10;
-	static int y = 10;
+	static int x = 1000;
+	static int y = 1000;
 	static int [][] grid = new int [x][y];
 
 	static void toggle (int num1x, int num1y, int num2x, int num2y){
-		System.out.println("======Toggle starts=====");
-		System.out.println("*******Start " + num1x + " " + num1y);
-		System.out.println("*******GOAL " + num2x + " " + num2y);
+		System.out.println("Toggle...");
+
 
 		while (num1x != num2x || num1y != num2y){
-			//System.out.println("Num1 " + num1x + " " + num1y);
-			grid [num1y][num1x] = 1;
+			if (grid [num1y][num1x] == 1){
+				grid [num1y][num1x] = 0;
+			}else grid [num1y][num1x] = 1;
+
 			num1x ++;
 			if (num1x> x-1 ){
 				num1y ++;
@@ -57,6 +58,18 @@ public class Day6{
 			}
 			System.out.println();
 		}
+	}
+
+	static int countFinal (){
+		total = 0;
+		for (int i=0 ; i < grid.length ; i++){
+			for (int j=0 ; j < grid[i].length ; j++){
+				if (grid[i][j] == 1){
+					total ++;
+				}
+			}
+		}
+		return total;
 	}
 
 	static void getRange(String stringy, Scanner reader){
@@ -84,33 +97,77 @@ public class Day6{
 			System.out.println("Row End " + num2x + " Column End " + num2y );
 	}
 
+	static void turnOff (int num1x, int num1y, int num2x, int num2y){
+		System.out.println("Turning off!");
+		while (num1x != num2x || num1y != num2y){
+			//System.out.println("Num1 " + num1x + " " + num1y);
+			grid [num1y][num1x] = 0;
+			num1x ++;
+			if (num1x> x-1 ){
+				num1y ++;
+				num1x = 0;
+			}
+		}
+		grid [num2y][num2x] = 0;
+
+	}
+
+	static void turnOn (int num1x, int num1y, int num2x, int num2y){
+		System.out.println("Turning on");
+		while (num1x != num2x || num1y != num2y){
+			//System.out.println("Num1 " + num1x + " " + num1y);
+			grid [num1y][num1x] = 1;
+			num1x ++;
+			if (num1x> x-1 ){
+				num1y ++;
+				num1x = 0;
+			}
+		}
+		grid [num2y][num2x] = 1;
+
+	}	
+	
+
 	public static void main(String[] args) {
-		String stringy = "toggle 1,1 through 2,2";
-		Scanner reader = new Scanner (stringy);
+		//String stringy = "turn off 499,499 through 500,500";
+		//Scanner reader = new Scanner (stringy);
 
-		String instruction;
-		instruction = reader.next();
+		String instruction, line;
+		try{
+			File file = new File ("input.txt");
+			Scanner reader = new Scanner (file);
 
-		if (instruction.equals("turn")){
-			instruction = reader.next();
-			if (instruction.equals("off")){
-				getRange(stringy, reader);
+			while (reader.hasNext()){
+
+				instruction = reader.next();
+				line = instruction;
+				if (instruction.equals("turn")){
+					instruction = reader.next();
+					if (instruction.equals("off")){
+						getRange(line, reader);
+						turnOff(num1x, num1y, num2x, num2y);
+						System.out.println("Total Number of lights lit: " + countFinal());
+
+					} else {
+						getRange(line, reader);
+						turnOn(num1x, num1y, num2x, num2y);
+						System.out.println("Total Number of lights lit: " + countFinal());
+
+					}
+				}
+				if (instruction.equals("toggle")){
+					getRange(line, reader);
+					toggle(num1x, num1y, num2x, num2y);
+					System.out.println("Total Number of lights lit: " + countFinal());
+
+				}	
 			}
 
-		}
 
-
-		//Decomposes TOGGLE instruction
-		if (instruction.equals("toggle")){
-			//finds first int param
-			/*
-			while (!reader.hasNextInt()){ 
-				reader.next();
-			}
-			*/
-			getRange(stringy, reader);
-			toggle(num1x, num1y, num2x, num2y);
+		} catch (Exception e){
+			System.out.println("File does not exist");
 		}
-		print();
+		//print();
+		System.out.println("Total Number of lights lit: " + countFinal());
 	}
 }
