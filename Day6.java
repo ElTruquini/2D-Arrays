@@ -19,35 +19,47 @@ For example:
 import java.util.*;
 import java.io.*;
 
-
+//deje toggle trabajando, faltan hacer pruebas
 public class Day6{
 
 	static String num1, num2, holder;
 	static Scanner nums;
 	static int num1x, num1y, num2x, num2y, total;
 
-	static int x = 1000;
-	static int y = 1000;
+	static int x = 10;
+	static int y = 10;
 	static int [][] grid = new int [x][y];
 
 	static void toggle (int num1x, int num1y, int num2x, int num2y){
 		System.out.println("Toggle...");
 
+		System.out.println("Togglin Num1: " + num1x + ", "+ num1y + ", " + "NUM2: " + num2x +", " + num2y + ", ");
+		boolean flag = true;
+			while (flag){
+				System.out.println(num1y + " " + num1x);
+				if (grid [num1y][num1x] == 1){ //cambia 0 a 1 y 1 a 0
+					grid [num1y][num1x] = 0;
+				}else grid [num1y][num1x] = 1;
 
-		while (num1x != num2x || num1y != num2y){
-			if (grid [num1y][num1x] == 1){
-				grid [num1y][num1x] = 0;
-			}else grid [num1y][num1x] = 1;
+				num1x ++; //avanza columna
 
-			num1x ++;
-			if (num1x> x-1 ){
-				num1y ++;
-				num1x = 0;
+				if (num1x> x-1 ){ //cuando cambia de renglon xq termina columna
+					num1y ++;
+					num1x = 0; //resetea columna
+				}
+
+					flag = num1x != num2x || num1y != num2y;
+/*boolean boly = num1y != num2y;
+System.out.println(" boly--- " + "num1y: " + num1y + " num2y: " + num2y + "  - " + boly);
+boolean bolx = num1x != num2x;
+System.out.println(" bolx---- " + "num1x: " + num1x + " num2x: " + num2x + "  - " + bolx);
+System.out.println("flag " + (flag) );*/
+				
 			}
-		}
-		grid [num2y][num2x] = 1;
-
-	}
+			if (grid [num1y][num1x] == 1){ //cambia la ultima casilla
+				grid [num1y][num1x] = 0;
+				}else grid [num1y][num1x] = 1;
+		}	
 
 	static void print (){
 		//System.out.println(grid.length);
@@ -164,10 +176,12 @@ public class Day6{
 			}
 
 
-		} catch (Exception e){
-			System.out.println("File does not exist");
+		} catch (RuntimeException e){
+			e.printStackTrace();
+		} catch (FileNotFoundException a){
+			a.printStackTrace();
 		}
-		//print();
+		print();
 		System.out.println("Total Number of lights lit: " + countFinal());
 	}
 }
